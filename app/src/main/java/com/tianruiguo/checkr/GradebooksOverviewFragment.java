@@ -31,17 +31,18 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ClassesFragment extends Fragment {
+public class GradebooksOverviewFragment extends Fragment {
 
     private ArrayAdapter<String> mClassesAdapter;
+    private ArrayList<Gradebook> mGradebooks;
 
-    public ClassesFragment() {
+    public GradebooksOverviewFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gradebooks_overview, container, false);
 
         mClassesAdapter =
                 new ArrayAdapter<String>(
@@ -131,7 +132,8 @@ public class ClassesFragment extends Fragment {
                 }
                 gradesJson = buffer.toString();
 
-                return JsonParser.parseSummary(gradesJson);
+                mGradebooks = JsonParser.parseSummary(gradesJson);
+                return mGradebooks;
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
