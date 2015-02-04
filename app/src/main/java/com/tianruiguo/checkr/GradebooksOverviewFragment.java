@@ -1,5 +1,6 @@
 package com.tianruiguo.checkr;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -33,6 +35,8 @@ import java.util.List;
  */
 public class GradebooksOverviewFragment extends Fragment {
 
+    public static final String GRADEBOOK_NUM = "gradebook_num";
+    
     private ArrayAdapter<String> mClassesAdapter;
     private ArrayList<Gradebook> mGradebooks;
 
@@ -52,16 +56,26 @@ public class GradebooksOverviewFragment extends Fragment {
                         new ArrayList<String>()
                 );
 
-        ListView listViewClasses = (ListView) rootView.findViewById(R.id.listview_classes);
-        listViewClasses.setAdapter(mClassesAdapter);
+        ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_classes);
+        listViewGradebooks.setAdapter(mClassesAdapter);
 
-        FetchGradesTask gradeFetchr = new FetchGradesTask();
-        gradeFetchr.execute();
+        FetchGradebooksTask gradebooksFetchr = new FetchGradebooksTask();
+        gradebooksFetchr.execute();
+
+        listViewGradebooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int gradebookNumber = mGradebooks.get(position).getGradebookNumber();
+                Intent intent = new Intent(getActivity(), GradebookDetailActivity.class);
+                intent.putExtra(GRADEBOOK_NUM, gradebookNumber);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
 
-    public class FetchGradesTask extends AsyncTask<Void, Void, ArrayList<Gradebook>> {
+    public class FetchGradebooksTask extends AsyncTask<Void, Void, ArrayList<Gradebook>> {
 
         private static final String LOG_TAG = "GRADES";
         private final String API_URL = "http://aeries-grade-check.herokuapp.com/testing.php";
