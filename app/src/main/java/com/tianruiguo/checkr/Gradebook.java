@@ -98,4 +98,8 @@ public class Gradebook {
     public String getComment() {
         return comment;
     }
+
+    public String printSimple() {
+        return getPeriod() + ". " + getClassName() + " - " + getPercentGrade() + "%";
+    }
 }
