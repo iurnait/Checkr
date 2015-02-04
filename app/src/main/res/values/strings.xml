@@ -4,6 +4,6 @@
     <string name="app_name">Checkr</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_gradebook_detail">GradebookDetail</string>
+    <string name="title_activity_gradebook_detail">Gradebook Details</string>
 
 </resources>

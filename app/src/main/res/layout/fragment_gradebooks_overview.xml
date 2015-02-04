@@ -9,7 +9,7 @@
     tools:context=".MainActivity.GradebooksOverviewFragment">
 
     <ListView
-        android:id="@+id/listview_classes"
+        android:id="@+id/listview_gradebooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

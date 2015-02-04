@@ -37,7 +37,7 @@ public class GradebooksOverviewFragment extends Fragment {
 
     public static final String GRADEBOOK_NUM = "gradebook_num";
     
-    private ArrayAdapter<String> mClassesAdapter;
+    private ArrayAdapter<String> mGradebooksAdapter;
     private ArrayList<Gradebook> mGradebooks;
 
     public GradebooksOverviewFragment() {
@@ -48,7 +48,7 @@ public class GradebooksOverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_gradebooks_overview, container, false);
 
-        mClassesAdapter =
+        mGradebooksAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
                         R.layout.list_item_class,
@@ -56,8 +56,8 @@ public class GradebooksOverviewFragment extends Fragment {
                         new ArrayList<String>()
                 );
 
-        ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_classes);
-        listViewGradebooks.setAdapter(mClassesAdapter);
+        ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_gradebooks);
+        listViewGradebooks.setAdapter(mGradebooksAdapter);
 
         FetchGradebooksTask gradebooksFetchr = new FetchGradebooksTask();
         gradebooksFetchr.execute();
@@ -174,9 +174,9 @@ public class GradebooksOverviewFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<Gradebook> gradebooks) {
             if (gradebooks != null) {
-                mClassesAdapter.clear();
+                mGradebooksAdapter.clear();
                 for (Gradebook g : gradebooks) {
-                    mClassesAdapter.add(g.printSimple());
+                    mGradebooksAdapter.add(g.printSimple());
                 }
             }
 
