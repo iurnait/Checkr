@@ -11,7 +11,6 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -27,23 +26,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.tianruiguo.checkr.helpers.FetchStuffTask;
 import com.tianruiguo.checkr.helpers.JsonParser;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,7 +138,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(this, email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -258,108 +246,38 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends FetchStuffTask {
 
-        private static final String LOG_TAG = "LOGIN";
-        private final String API_URL = "https://aeries-grade-check.herokuapp.com/testing.php";
-        private final String EMAIL = "user_email";
-        private final String PASSWORD = "user_password";
-        private final String TYPE = "type";
+        private static final String EMAIL = "user_email";
+        private static final String PASSWORD = "user_password";
+        
+        private String mEmail;
+        private String mPassword;
 
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+        public UserLoginTask(Activity callingActivity, String mEmail, String mPassword) {
+            super(callingActivity);
+            this.mEmail = mEmail;
+            this.mPassword = mPassword;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-
-            String returnedJson;
-
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-
-            String type = "is_logged_in";
-
-            try {
-                URL url = new URL(API_URL);
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setReadTimeout(10000);
-                // Heroku takes a to start up when dyno goes to sleep
-                urlConnection.setConnectTimeout(20000);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-                urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 ( compatible ) ");
-                urlConnection.setRequestProperty("Accept", "*/*");
-
-                List<NameValuePair> post = new ArrayList<NameValuePair>();
-                post.add(new BasicNameValuePair(TYPE, type));
-                post.add(new BasicNameValuePair(EMAIL, mEmail));
-                post.add(new BasicNameValuePair(PASSWORD, mPassword));
-
-                OutputStream os = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getQuery(post));
-                writer.flush();
-                writer.close();
-                os.close();
-
-                urlConnection.connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
-                    // Nothing to do.
-                    return false;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                }
-
-                if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
-                    return null;
-                }
-                returnedJson = buffer.toString();
-
-                return JsonParser.isLoggedIn(returnedJson);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "Error ", e);
-            } catch (JSONException e) {
-                Log.e(LOG_TAG, "Error ", e);
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (final IOException e) {
-                        Log.e(LOG_TAG, "Error closing stream", e);
-                    }
-                }
-            }
-
-            return false;
+        protected void onPreExecute() {
+            addPost(new BasicNameValuePair(EMAIL, mEmail));
+            addPost(new BasicNameValuePair(PASSWORD, mPassword));
+            addPost(new BasicNameValuePair("type", "is_logged_in"));
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(String json) {
             mAuthTask = null;
             showProgress(false);
+
+            boolean success = false;
+            try {
+                success = JsonParser.isLoggedIn(json);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, e.getLocalizedMessage());
+            }
 
             if (success) {
                 SharedPreferences sharedPreferences = getSharedPreferences("com.tianruiguo.checkr.AUTH", Context.MODE_PRIVATE);
@@ -381,24 +299,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
         }
 
-        // http://stackoverflow.com/a/13486223
-        private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
-            StringBuilder result = new StringBuilder();
-            boolean first = true;
-
-            for (NameValuePair pair : params) {
-                if (first)
-                    first = false;
-                else
-                    result.append("&");
-
-                result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-                result.append("=");
-                result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-            }
-
-            return result.toString();
-        }
     }
 }
 
