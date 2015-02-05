@@ -12,11 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.tianruiguo.checkr.helpers.FetchStuffTask;
 import com.tianruiguo.checkr.helpers.Gradebook;
+import com.tianruiguo.checkr.helpers.GradebookAdapter;
 import com.tianruiguo.checkr.helpers.JsonParser;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -31,7 +31,7 @@ public class GradebooksOverviewFragment extends Fragment {
 
     public static final String GRADEBOOK_NUM = "gradebook_num";
 
-    private ArrayAdapter<String> mGradebooksAdapter;
+    private GradebookAdapter mGradebooksAdapter;
     private ArrayList<Gradebook> mGradebooks;
 
     public GradebooksOverviewFragment() {
@@ -70,13 +70,7 @@ public class GradebooksOverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_gradebooks_overview, container, false);
 
-        mGradebooksAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(),
-                        R.layout.list_item_class,
-                        R.id.list_item_class_textview,
-                        new ArrayList<String>()
-                );
+        mGradebooksAdapter = new GradebookAdapter(getActivity(), new ArrayList<Gradebook>());
 
         ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_gradebooks);
         listViewGradebooks.setAdapter(mGradebooksAdapter);
@@ -123,7 +117,7 @@ public class GradebooksOverviewFragment extends Fragment {
 
                 mGradebooksAdapter.clear();
                 for (Gradebook g : mGradebooks) {
-                    mGradebooksAdapter.add(g.printSimple());
+                    mGradebooksAdapter.add(g);
                 }
             }
 
