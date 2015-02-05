@@ -1,6 +1,8 @@
 package com.tianruiguo.checkr;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -122,6 +124,15 @@ public class GradebookDetailActivity extends ActionBarActivity {
             private final String TYPE = "type";
             private final String GRADEBOOK = "gradebook_number";
 
+            private String email, password;
+
+            @Override
+            protected void onPreExecute() {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.tianruiguo.checkr.AUTH", Context.MODE_PRIVATE);
+                email = sharedPreferences.getString("EMAIL", "none");
+                password = sharedPreferences.getString("PASSWORD", "none");
+            }
+
             @Override
             protected ArrayList<Assignment> doInBackground(String... params) {
 
@@ -131,8 +142,6 @@ public class GradebookDetailActivity extends ActionBarActivity {
                 BufferedReader reader = null;
 
                 String type = "class_detail";
-                String email = Auth.EMAIL;
-                String password = Auth.PASSWORD;
                 String gradebook = params[0];
 
                 try {

@@ -1,6 +1,8 @@
 package com.tianruiguo.checkr;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -117,6 +119,15 @@ public class GradebooksOverviewFragment extends Fragment {
         private final String PASSWORD = "user_password";
         private final String TYPE = "type";
 
+        private String email, password;
+        
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.tianruiguo.checkr.AUTH", Context.MODE_PRIVATE);
+            email = sharedPreferences.getString("EMAIL", "none");
+            password = sharedPreferences.getString("PASSWORD", "none");
+        }
+
         @Override
         protected ArrayList<Gradebook> doInBackground(Void... params) {
 
@@ -126,8 +137,6 @@ public class GradebooksOverviewFragment extends Fragment {
             BufferedReader reader = null;
 
             String type = "summary";
-            String email = Auth.EMAIL;
-            String password = Auth.PASSWORD;
 
             try {
                 URL url = new URL(API_URL);

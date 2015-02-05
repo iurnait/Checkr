@@ -1,5 +1,7 @@
 package com.tianruiguo.checkr.helpers;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +65,13 @@ public class Assignment {
         String date2 = json.getString(DATE_DUE);
         dateDue = new Date(Long.parseLong(date2.substring(date2.indexOf("(") + 1, date2.indexOf(")"))));
         String date3 = json.getString(DATE_COMPLETED);
-        dateCompleted = new Date(Long.parseLong(date3.substring(date3.indexOf("(") + 1, date3.indexOf(")"))));
+        try {
+            dateCompleted = new Date(Long.parseLong(date3.substring(date3.indexOf("(") + 1, date3.indexOf(")"))));
+        } catch (StringIndexOutOfBoundsException e) {
+            // Sometimes date is "null"
+            // TODO: properly handle this
+            Log.e("JSON", date3);
+        }
 
     }
 

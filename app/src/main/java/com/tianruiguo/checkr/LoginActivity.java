@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -159,8 +161,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return true;
     }
 
     /**
@@ -361,7 +362,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
-                // TODO: Store credentials
+                SharedPreferences sharedPreferences = getSharedPreferences("com.tianruiguo.checkr.AUTH", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("EMAIL", mEmail);
+                editor.putString("PASSWORD", mPassword); // TODO: don't store this in plaintext.
+                editor.commit();
+                
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
