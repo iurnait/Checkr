@@ -12,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.tianruiguo.checkr.helpers.Gradebook;
+import com.tianruiguo.checkr.helpers.JsonParser;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -78,7 +81,7 @@ public class GradebooksOverviewFragment extends Fragment {
     public class FetchGradebooksTask extends AsyncTask<Void, Void, ArrayList<Gradebook>> {
 
         private static final String LOG_TAG = "GRADES";
-        private final String API_URL = "http://aeries-grade-check.herokuapp.com/testing.php";
+        private final String API_URL = "https://aeries-grade-check.herokuapp.com/testing.php";
         private final String EMAIL = "user_email";
         private final String PASSWORD = "user_password";
         private final String TYPE = "type";

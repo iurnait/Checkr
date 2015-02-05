@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.tianruiguo.checkr.helpers.Assignment;
+import com.tianruiguo.checkr.helpers.JsonParser;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -113,7 +116,7 @@ public class GradebookDetailActivity extends ActionBarActivity {
         public class FetchGradebookDetailsTask extends AsyncTask<String, Void, ArrayList<Assignment>> {
 
             private static final String LOG_TAG = "GRADE_DETAILS";
-            private final String API_URL = "http://aeries-grade-check.herokuapp.com/testing.php";
+            private final String API_URL = "https://aeries-grade-check.herokuapp.com/testing.php";
             private final String EMAIL = "user_email";
             private final String PASSWORD = "user_password";
             private final String TYPE = "type";
@@ -188,7 +191,7 @@ public class GradebookDetailActivity extends ActionBarActivity {
                     return mGradebookDetails;
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Error ", e);
-                    // If the code didn't successfully get the weather data, there's no point in attemping
+                    // If the code didn't successfully get the gradebook data, there's no point in attemping
                     // to parse it.
                     return null;
                 } catch (JSONException e) {

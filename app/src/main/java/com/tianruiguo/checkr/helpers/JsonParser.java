@@ -1,4 +1,4 @@
-package com.tianruiguo.checkr;
+package com.tianruiguo.checkr.helpers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
