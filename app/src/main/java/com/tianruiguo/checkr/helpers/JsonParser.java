@@ -35,4 +35,8 @@ public class JsonParser {
         }
         return assignments;
     }
+
+    public static boolean isLoggedIn (String jsonString) throws JSONException {
+        return (new JSONObject(jsonString)).getBoolean("d");
+    }
 }
