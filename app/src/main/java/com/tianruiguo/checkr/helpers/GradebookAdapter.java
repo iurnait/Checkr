@@ -47,7 +47,7 @@ public class GradebookAdapter extends ArrayAdapter<Gradebook> {
             default:
                 trend.setImageResource(R.drawable.ic_action_trending_neutral);
         }
-        className.setText(gradebook.getClassName());
+        className.setText(gradebook.getPeriod() + ". " + gradebook.getClassName());
         percentageGrade.setText(gradebook.getPercentGrade() + "%");
         mark.setText(gradebook.getMark());
         lastUpdate.setText(gradebook.printSimpleDate());

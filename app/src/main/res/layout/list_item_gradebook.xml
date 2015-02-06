@@ -23,12 +23,16 @@
         <TextView
             android:id="@+id/text_view_class_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_view_last_updated"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -39,12 +43,15 @@
         <TextView
             android:id="@+id/text_view_class_mark"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_view_class_percentage_grade"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
 
