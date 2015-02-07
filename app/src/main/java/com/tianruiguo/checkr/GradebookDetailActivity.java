@@ -100,7 +100,7 @@ public class GradebookDetailActivity extends ActionBarActivity {
         public class FetchGradebookDetailsTask extends FetchStuffTask {
 
             private int gradebookId;
-            
+
             public FetchGradebookDetailsTask(Activity callingActivity, int gradebookId) {
                 super(callingActivity);
                 this.gradebookId = gradebookId;

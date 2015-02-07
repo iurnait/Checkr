@@ -22,9 +22,10 @@ public class GradebookContract {
         public static final String COLUMN_IS_USING_CHECK_MARKS = "isUsingCheckMarks";
     }
 
-    public static final class Assignment implements BaseColumns {
+    public static final class AssignmentEntry implements BaseColumns {
         public static final String TABLE_NAME = "assignment";
 
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_GRADEBOOK_NUMBER = "gradebookNumber";
         public static final String COLUMN_ASSIGNMENT_NUMBER = "assignmentNumber";
         public static final String COLUMN_DESCRIPTION = "description";

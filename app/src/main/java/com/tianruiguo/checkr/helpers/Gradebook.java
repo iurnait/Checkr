@@ -36,6 +36,9 @@ public class Gradebook {
     private String trendDirection;
     private String comment;
 
+    public Gradebook() {
+    }
+
     public Gradebook(JSONObject jsonObject) throws JSONException {
         gradebookNumber = jsonObject.getInt(GRADEBOOK_NUMBER);
         code = jsonObject.getString(CODE);
@@ -59,44 +62,88 @@ public class Gradebook {
         return isUsingCheckMarks;
     }
 
+    public void setUsingCheckMarks(boolean isUsingCheckMarks) {
+        this.isUsingCheckMarks = isUsingCheckMarks;
+    }
+
     public Date getUpdated() {
         return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     public int getGradebookNumber() {
         return gradebookNumber;
     }
 
+    public void setGradebookNumber(int gradebookNumber) {
+        this.gradebookNumber = gradebookNumber;
+    }
+
     public int getMissingAssignments() {
         return missingAssignments;
+    }
+
+    public void setMissingAssignments(int missingAssignments) {
+        this.missingAssignments = missingAssignments;
     }
 
     public int getPeriod() {
         return period;
     }
 
+    public void setPeriod(int period) {
+        this.period = period;
+    }
+
     public int getPercentGrade() {
         return percentGrade;
+    }
+
+    public void setPercentGrade(int percentGrade) {
+        this.percentGrade = percentGrade;
     }
 
     public String getCode() {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getMark() {
         return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 
     public String getClassName() {
         return className;
     }
 
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
     public String getTrendDirection() {
         return trendDirection;
     }
 
+    public void setTrendDirection(String trendDirection) {
+        this.trendDirection = trendDirection;
+    }
+
     public String getComment() {
         return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String printSimple() {
