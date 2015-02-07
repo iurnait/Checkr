@@ -14,9 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.tianruiguo.checkr.helpers.objects.Assignment;
 import com.tianruiguo.checkr.helpers.FetchStuffTask;
 import com.tianruiguo.checkr.helpers.JsonParser;
+import com.tianruiguo.checkr.helpers.database.GradebookDataSource;
+import com.tianruiguo.checkr.helpers.objects.Assignment;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -64,8 +65,11 @@ public class GradebookDetailActivity extends ActionBarActivity {
     public static class GradebookDetailFragment extends Fragment {
 
         private static final String LOG_TAG = "GRADE_DETAILS";
+
+        private GradebookDataSource mGradebookDataSource;
         private ArrayList<Assignment> mAssignments;
         private ArrayAdapter<String> mAssignmentsAdapter;
+        private int mGradebookId;
 
         public GradebookDetailFragment() {
         }
@@ -77,7 +81,10 @@ public class GradebookDetailActivity extends ActionBarActivity {
 
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(GradebooksOverviewFragment.GRADEBOOK_NUM)) {
-                int gradebookId = intent.getIntExtra(GradebooksOverviewFragment.GRADEBOOK_NUM, 0);
+                mGradebookId = intent.getIntExtra(GradebooksOverviewFragment.GRADEBOOK_NUM, 0);
+
+                mGradebookDataSource = new GradebookDataSource(getActivity());
+                mGradebookDataSource.open();
 
                 mAssignmentsAdapter =
                         new ArrayAdapter<String>(
@@ -90,27 +97,48 @@ public class GradebookDetailActivity extends ActionBarActivity {
                 ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_assignments);
                 listViewGradebooks.setAdapter(mAssignmentsAdapter);
 
-                FetchGradebookDetailsTask gradebooksFetchr = new FetchGradebookDetailsTask(getActivity(), gradebookId);
-                gradebooksFetchr.execute();
+                updateView();
+                updateDb();
             }
             return rootView;
         }
 
+        private void updateDb() {
+            FetchAssignmentsTask gradebooksFetchr = new FetchAssignmentsTask(getActivity());
+            gradebooksFetchr.execute();
+        }
 
-        public class FetchGradebookDetailsTask extends FetchStuffTask {
+        private void updateView() {
+            mAssignmentsAdapter.clear();
+            mAssignments = mGradebookDataSource.getAssignments(mGradebookId);
+            for (Assignment a : mAssignments) {
+                mAssignmentsAdapter.add(a.printSimple());
+            }
+        }
 
-            private int gradebookId;
+        @Override
+        public void onPause() {
+            mGradebookDataSource.close();
+            super.onPause();
+        }
 
-            public FetchGradebookDetailsTask(Activity callingActivity, int gradebookId) {
+        @Override
+        public void onResume() {
+            mGradebookDataSource.open();
+            super.onResume();
+        }
+
+        public class FetchAssignmentsTask extends FetchStuffTask {
+
+            public FetchAssignmentsTask(Activity callingActivity) {
                 super(callingActivity);
-                this.gradebookId = gradebookId;
             }
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 addPost(new BasicNameValuePair("type", "class_detail"));
-                addPost(new BasicNameValuePair("gradebook_number", "" + gradebookId));
+                addPost(new BasicNameValuePair("gradebook_number", "" + mGradebookId));
             }
 
             @Override
@@ -118,15 +146,13 @@ public class GradebookDetailActivity extends ActionBarActivity {
                 if (json != null) {
                     try {
                         mAssignments = JsonParser.parseDetail(json);
+                        mGradebookDataSource.addAssignments(mAssignments);
+                        updateView();
                     } catch (JSONException e) {
                         Log.e(LOG_TAG, e.getLocalizedMessage());
                         Log.d(LOG_TAG, "JSON: " + json);
                     }
 
-                    mAssignmentsAdapter.clear();
-                    for (Assignment a : mAssignments) {
-                        mAssignmentsAdapter.add(a.printSimple());
-                    }
                 }
 
             }

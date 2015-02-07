@@ -42,7 +42,7 @@ public class GradebookDbHelper extends SQLiteOpenHelper {
                         AssignmentEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         AssignmentEntry.COLUMN_ASSIGNMENT_NUMBER + " INTEGER ," +
                         AssignmentEntry.COLUMN_GRADEBOOK_NUMBER + " INTEGER," +
-                        GradebookContract.AssignmentEntry.COLUMN_DESCRIPTION + " TEXT," +
+                        AssignmentEntry.COLUMN_DESCRIPTION + " TEXT," +
                         AssignmentEntry.COLUMN_TYPE + " TEXT," +
                         AssignmentEntry.COLUMN_IS_GRADED + " BOOLEAN," +
                         AssignmentEntry.COLUMN_IS_SCORE_VISIBLE_TO_PARENTS + " BOOLEAN," +

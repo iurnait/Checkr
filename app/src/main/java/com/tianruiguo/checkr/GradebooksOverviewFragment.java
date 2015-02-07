@@ -15,9 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tianruiguo.checkr.helpers.FetchStuffTask;
-import com.tianruiguo.checkr.helpers.objects.Gradebook;
 import com.tianruiguo.checkr.helpers.GradebookAdapter;
 import com.tianruiguo.checkr.helpers.JsonParser;
+import com.tianruiguo.checkr.helpers.database.GradebookDataSource;
+import com.tianruiguo.checkr.helpers.objects.Gradebook;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -31,6 +32,7 @@ public class GradebooksOverviewFragment extends Fragment {
 
     public static final String GRADEBOOK_NUM = "gradebook_num";
 
+    private GradebookDataSource mGradebookDataSource;
     private GradebookAdapter mGradebooksAdapter;
     private ArrayList<Gradebook> mGradebooks;
 
@@ -53,8 +55,7 @@ public class GradebooksOverviewFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            FetchGradebooksTask fetchGradebooksTask = new FetchGradebooksTask(getActivity());
-            fetchGradebooksTask.execute();
+            updateDb();
             return true;
         } else if (id == R.id.action_login) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -70,14 +71,16 @@ public class GradebooksOverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_gradebooks_overview, container, false);
 
+        mGradebookDataSource = new GradebookDataSource(getActivity());
+        mGradebookDataSource.open();
+
         mGradebooksAdapter = new GradebookAdapter(getActivity(), new ArrayList<Gradebook>());
 
         ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_gradebooks);
         listViewGradebooks.setAdapter(mGradebooksAdapter);
 
-        FetchGradebooksTask gradebooksFetchr = new FetchGradebooksTask(getActivity());
-        gradebooksFetchr.execute();
-
+        updateView();
+        
         listViewGradebooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -91,8 +94,32 @@ public class GradebooksOverviewFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchGradebooksTask extends FetchStuffTask {
+    private void updateDb() {
+        FetchGradebooksTask gradebooksFetchr = new FetchGradebooksTask(getActivity());
+        gradebooksFetchr.execute();
+    }
 
+    private void updateView() {
+        mGradebooksAdapter.clear();
+        mGradebooks = mGradebookDataSource.getGradebooks();
+        for (Gradebook g : mGradebooks) {
+            mGradebooksAdapter.add(g);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        mGradebookDataSource.close();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        mGradebookDataSource.open();
+        super.onResume();
+    }
+
+    public class FetchGradebooksTask extends FetchStuffTask {
 
         public FetchGradebooksTask(Activity callingActivity) {
             super(callingActivity);
@@ -110,14 +137,11 @@ public class GradebooksOverviewFragment extends Fragment {
 
                 try {
                     mGradebooks = JsonParser.parseSummary(json);
+                    mGradebookDataSource.addGradebooks(mGradebooks);
+                    updateView();
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, e.getLocalizedMessage());
                     Log.d(LOG_TAG, "JSON: " + json);
-                }
-
-                mGradebooksAdapter.clear();
-                for (Gradebook g : mGradebooks) {
-                    mGradebooksAdapter.add(g);
                 }
             }
 
