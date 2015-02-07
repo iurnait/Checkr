@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class GradebookDataSource {
 
-    SQLiteOpenHelper dbHelper;
-    SQLiteDatabase db;
+    private SQLiteOpenHelper dbHelper;
+    private SQLiteDatabase db;
 
     public GradebookDataSource(Context context) {
         dbHelper = new GradebookDbHelper(context);

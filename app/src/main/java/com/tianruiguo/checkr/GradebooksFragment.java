@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class GradebooksOverviewFragment extends Fragment {
+public class GradebooksFragment extends Fragment {
 
     public static final String GRADEBOOK_NUM = "gradebook_num";
 
@@ -36,7 +36,7 @@ public class GradebooksOverviewFragment extends Fragment {
     private GradebookAdapter mGradebooksAdapter;
     private ArrayList<Gradebook> mGradebooks;
 
-    public GradebooksOverviewFragment() {
+    public GradebooksFragment() {
     }
 
     @Override
@@ -47,7 +47,7 @@ public class GradebooksOverviewFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_gradebook_overview_fragment, menu);
+        inflater.inflate(R.menu.menu_gradebooks_fragment, menu);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GradebooksOverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_gradebooks_overview, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gradebooks, container, false);
 
         mGradebookDataSource = new GradebookDataSource(getActivity());
         mGradebookDataSource.open();
