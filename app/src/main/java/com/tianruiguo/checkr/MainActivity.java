@@ -1,5 +1,8 @@
 package com.tianruiguo.checkr;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -12,6 +15,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        if (!hasLoginCredentials()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+        
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new GradebooksFragment())
@@ -40,5 +49,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    
+    private boolean hasLoginCredentials() {
+        SharedPreferences sharedPreferences = getSharedPreferences("com.tianruiguo.checkr.AUTH", Context.MODE_PRIVATE);
+        return sharedPreferences.contains("EMAIL") && sharedPreferences.contains("PASSWORD");
     }
 }

@@ -1,7 +1,9 @@
 package com.tianruiguo.checkr;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -80,6 +82,7 @@ public class GradebooksFragment extends Fragment {
         listViewGradebooks.setAdapter(mGradebooksAdapter);
 
         updateView();
+        updateDb();
         
         listViewGradebooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,9 +97,16 @@ public class GradebooksFragment extends Fragment {
         return rootView;
     }
 
+    private boolean hasLoginCredentials() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.tianruiguo.checkr.AUTH", Context.MODE_PRIVATE);
+        return sharedPreferences.contains("EMAIL") && sharedPreferences.contains("PASSWORD");
+    }
+    
     private void updateDb() {
-        FetchGradebooksTask gradebooksFetchr = new FetchGradebooksTask(getActivity());
-        gradebooksFetchr.execute();
+        if (hasLoginCredentials()) {
+            FetchGradebooksTask gradebooksFetchr = new FetchGradebooksTask(getActivity());
+            gradebooksFetchr.execute();
+        }
     }
 
     private void updateView() {

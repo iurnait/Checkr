@@ -36,6 +36,7 @@ public class GradebookDataSource {
     }
 
     public void addGradebook(Gradebook gradebook) {
+        open();
         ContentValues values = new ContentValues();
         values.put(GradebookEntry.COLUMN_GRADEBOOK_NUMBER, gradebook.getGradebookNumber());
         values.put(GradebookEntry.COLUMN_CODE, gradebook.getCode());
@@ -58,6 +59,7 @@ public class GradebookDataSource {
     }
 
     public ArrayList<Gradebook> getGradebooks() {
+        open();
         ArrayList<Gradebook> gradebooks = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("select * from " + GradebookEntry.TABLE_NAME +
@@ -96,6 +98,7 @@ public class GradebookDataSource {
     }
 
     public void addAssignment(Assignment assignment) {
+        open();
         ContentValues values = new ContentValues();
         values.put(AssignmentEntry.COLUMN_GRADEBOOK_NUMBER, assignment.getGradebookNumber());
         values.put(AssignmentEntry.COLUMN_ASSIGNMENT_NUMBER, assignment.getAssignmentNumber());
@@ -124,6 +127,7 @@ public class GradebookDataSource {
     }
 
     public ArrayList<Assignment> getAssignments(int gradebookId) {
+        open();
         ArrayList<Assignment> assignments = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("select * from " + AssignmentEntry.TABLE_NAME +
