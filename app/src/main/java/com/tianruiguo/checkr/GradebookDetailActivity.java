@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.tianruiguo.checkr.helpers.AssignmentAdapter;
 import com.tianruiguo.checkr.helpers.FetchStuffTask;
 import com.tianruiguo.checkr.helpers.JsonParser;
 import com.tianruiguo.checkr.helpers.database.GradebookDataSource;
@@ -33,7 +33,7 @@ public class GradebookDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_gradebook_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new GradebookDetailFragment())
+                    .add(R.id.container, new AssignmentsFragment())
                     .commit();
         }
     }
@@ -62,38 +62,31 @@ public class GradebookDetailActivity extends ActionBarActivity {
     }
 
 
-    public static class GradebookDetailFragment extends Fragment {
+    public static class AssignmentsFragment extends Fragment {
 
         private static final String LOG_TAG = "GRADE_DETAILS";
 
         private GradebookDataSource mGradebookDataSource;
         private ArrayList<Assignment> mAssignments;
-        private ArrayAdapter<String> mAssignmentsAdapter;
+        private AssignmentAdapter mAssignmentsAdapter;
         private int mGradebookId;
 
-        public GradebookDetailFragment() {
+        public AssignmentsFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_gradebook_detail, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_assignments, container, false);
 
             Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(GradebooksOverviewFragment.GRADEBOOK_NUM)) {
-                mGradebookId = intent.getIntExtra(GradebooksOverviewFragment.GRADEBOOK_NUM, 0);
+            if (intent != null && intent.hasExtra(GradebooksFragment.GRADEBOOK_NUM)) {
+                mGradebookId = intent.getIntExtra(GradebooksFragment.GRADEBOOK_NUM, 0);
 
                 mGradebookDataSource = new GradebookDataSource(getActivity());
                 mGradebookDataSource.open();
 
-                mAssignmentsAdapter =
-                        new ArrayAdapter<String>(
-                                getActivity(),
-                                R.layout.list_item_class,
-                                R.id.list_item_class_textview,
-                                new ArrayList<String>()
-                        );
-
+                mAssignmentsAdapter = new AssignmentAdapter(getActivity(), new ArrayList<Assignment>());
                 ListView listViewGradebooks = (ListView) rootView.findViewById(R.id.listview_assignments);
                 listViewGradebooks.setAdapter(mAssignmentsAdapter);
 
@@ -112,7 +105,7 @@ public class GradebookDetailActivity extends ActionBarActivity {
             mAssignmentsAdapter.clear();
             mAssignments = mGradebookDataSource.getAssignments(mGradebookId);
             for (Assignment a : mAssignments) {
-                mAssignmentsAdapter.add(a.printSimple());
+                mAssignmentsAdapter.add(a);
             }
         }
 
