@@ -1,11 +1,11 @@
-package com.tianruiguo.checkr.helpers.datastuff;
+package com.tianruiguo.checkr.helpers.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.tianruiguo.checkr.helpers.datastuff.GradebookContract.AssignmentEntry;
-import com.tianruiguo.checkr.helpers.datastuff.GradebookContract.GradebookEntry;
+import com.tianruiguo.checkr.helpers.database.GradebookContract.AssignmentEntry;
+import com.tianruiguo.checkr.helpers.database.GradebookContract.GradebookEntry;
 
 /**
  * Created by tianrui on 2/5/15.

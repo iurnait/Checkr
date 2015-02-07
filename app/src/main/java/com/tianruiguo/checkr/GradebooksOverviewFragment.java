@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tianruiguo.checkr.helpers.FetchStuffTask;
-import com.tianruiguo.checkr.helpers.Gradebook;
+import com.tianruiguo.checkr.helpers.objects.Gradebook;
 import com.tianruiguo.checkr.helpers.GradebookAdapter;
 import com.tianruiguo.checkr.helpers.JsonParser;
 

@@ -1,4 +1,4 @@
-package com.tianruiguo.checkr.helpers;
+package com.tianruiguo.checkr.helpers.objects;
 
 import org.json.JSONException;
 import org.json.JSONObject;

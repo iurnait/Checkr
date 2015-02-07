@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.tianruiguo.checkr.helpers.Assignment;
+import com.tianruiguo.checkr.helpers.objects.Assignment;
 import com.tianruiguo.checkr.helpers.FetchStuffTask;
 import com.tianruiguo.checkr.helpers.JsonParser;
 

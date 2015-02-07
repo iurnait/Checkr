@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianruiguo.checkr.R;
+import com.tianruiguo.checkr.helpers.objects.Gradebook;
 
 import java.util.ArrayList;
 

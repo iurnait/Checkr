@@ -1,4 +1,4 @@
-package com.tianruiguo.checkr.helpers.datastuff;
+package com.tianruiguo.checkr.helpers.database;
 
 import android.provider.BaseColumns;
 

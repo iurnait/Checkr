@@ -1,5 +1,8 @@
 package com.tianruiguo.checkr.helpers;
 
+import com.tianruiguo.checkr.helpers.objects.Assignment;
+import com.tianruiguo.checkr.helpers.objects.Gradebook;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

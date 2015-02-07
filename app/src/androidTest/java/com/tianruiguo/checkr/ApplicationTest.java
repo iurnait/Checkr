@@ -4,7 +4,7 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.ApplicationTestCase;
 
-import com.tianruiguo.checkr.helpers.datastuff.GradebookDbHelper;
+import com.tianruiguo.checkr.helpers.database.GradebookDbHelper;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>

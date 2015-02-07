@@ -1,4 +1,4 @@
-package com.tianruiguo.checkr.helpers;
+package com.tianruiguo.checkr.helpers.objects;
 
 import android.util.Log;
 

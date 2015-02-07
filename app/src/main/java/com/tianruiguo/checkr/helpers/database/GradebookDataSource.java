@@ -1,4 +1,4 @@
-package com.tianruiguo.checkr.helpers.datastuff;
+package com.tianruiguo.checkr.helpers.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.tianruiguo.checkr.helpers.Assignment;
-import com.tianruiguo.checkr.helpers.Gradebook;
-import com.tianruiguo.checkr.helpers.datastuff.GradebookContract.AssignmentEntry;
-import com.tianruiguo.checkr.helpers.datastuff.GradebookContract.GradebookEntry;
+import com.tianruiguo.checkr.helpers.objects.Assignment;
+import com.tianruiguo.checkr.helpers.objects.Gradebook;
+import com.tianruiguo.checkr.helpers.database.GradebookContract.AssignmentEntry;
+import com.tianruiguo.checkr.helpers.database.GradebookContract.GradebookEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
