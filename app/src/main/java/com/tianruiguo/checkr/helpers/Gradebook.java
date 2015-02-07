@@ -3,6 +3,7 @@ package com.tianruiguo.checkr.helpers;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -148,5 +149,10 @@ public class Gradebook {
 
     public String printSimple() {
         return getPeriod() + ". " + getClassName() + " - " + getPercentGrade() + "%";
+    }
+    
+    public String printSimpleDate() {
+        SimpleDateFormat fmt = new SimpleDateFormat ("E',' MMM dd 'at' hh:mm a");
+        return fmt.format(getUpdated());
     }
 }
