@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.tianruiguo.checkr.helpers.objects.Assignment;
-import com.tianruiguo.checkr.helpers.objects.Gradebook;
 import com.tianruiguo.checkr.helpers.database.GradebookContract.AssignmentEntry;
 import com.tianruiguo.checkr.helpers.database.GradebookContract.GradebookEntry;
+import com.tianruiguo.checkr.helpers.objects.Assignment;
+import com.tianruiguo.checkr.helpers.objects.Gradebook;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +44,7 @@ public class GradebookDataSource {
         values.put(GradebookEntry.COLUMN_MARK, gradebook.getMark());
         values.put(GradebookEntry.COLUMN_CLASS_NAME, gradebook.getClassName());
         values.put(GradebookEntry.COLUMN_MISSING_ASSIGNMENTS, gradebook.getMissingAssignments());
-        values.put(GradebookEntry.COLUMN_UPDATED, gradebook.getUpdated().getTime());
+        values.put(GradebookEntry.COLUMN_UPDATED, gradebook.getUpdatedEpoch());
         values.put(GradebookEntry.COLUMN_TREND_DIRECTION, gradebook.getTrendDirection());
         values.put(GradebookEntry.COLUMN_PERCENT_GRADE, gradebook.getPercentGrade());
         values.put(GradebookEntry.COLUMN_COMMENT, gradebook.getComment());
@@ -80,7 +80,7 @@ public class GradebookDataSource {
                         cursor.getColumnIndex(GradebookEntry.COLUMN_CLASS_NAME)));
                 gradebook.setMissingAssignments(cursor.getInt(
                         cursor.getColumnIndex(GradebookEntry.COLUMN_MISSING_ASSIGNMENTS)));
-                gradebook.setUpdated(new Date(cursor.getInt(
+                gradebook.setUpdated(new Date(cursor.getLong(
                         cursor.getColumnIndex(GradebookEntry.COLUMN_UPDATED))));
                 gradebook.setTrendDirection(cursor.getString(
                         cursor.getColumnIndex(GradebookEntry.COLUMN_TREND_DIRECTION)));
@@ -113,9 +113,9 @@ public class GradebookDataSource {
         values.put(AssignmentEntry.COLUMN_SCORE, assignment.getScore());
         values.put(AssignmentEntry.COLUMN_MAX_SCORE, assignment.getMaxScore());
         values.put(AssignmentEntry.COLUMN_PERCENT, assignment.getPercent());
-        values.put(AssignmentEntry.COLUMN_DATE_ASSIGNED, assignment.getDateAssigned().getTime());
-        values.put(AssignmentEntry.COLUMN_DATE_DUE, assignment.getDateDue().getTime());
-        values.put(AssignmentEntry.COLUMN_DATE_COMPLETED, assignment.getDateCompleted().getTime());
+        values.put(AssignmentEntry.COLUMN_DATE_ASSIGNED, assignment.getDateAssignedEpoch());
+        values.put(AssignmentEntry.COLUMN_DATE_DUE, assignment.getDateDueEpoch());
+        values.put(AssignmentEntry.COLUMN_DATE_COMPLETED, assignment.getDateCompletedEpoch());
 
         db.insertWithOnConflict(AssignmentEntry.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
@@ -163,11 +163,11 @@ public class GradebookDataSource {
                         cursor.getColumnIndex(AssignmentEntry.COLUMN_MAX_SCORE)));
                 assignment.setPercent(cursor.getInt(
                         cursor.getColumnIndex(AssignmentEntry.COLUMN_PERCENT)));
-                assignment.setDateAssigned(new Date(cursor.getInt(
+                assignment.setDateAssigned(new Date(cursor.getLong(
                         cursor.getColumnIndex(AssignmentEntry.COLUMN_DATE_ASSIGNED))));
-                assignment.setDateDue(new Date(cursor.getInt(
+                assignment.setDateDue(new Date(cursor.getLong(
                         cursor.getColumnIndex(AssignmentEntry.COLUMN_DATE_DUE))));
-                assignment.setDateCompleted(new Date(cursor.getInt(
+                assignment.setDateCompleted(new Date(cursor.getLong(
                         cursor.getColumnIndex(AssignmentEntry.COLUMN_DATE_COMPLETED))));
 
                 assignments.add(assignment);

@@ -1,7 +1,5 @@
 package com.tianruiguo.checkr.helpers.objects;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,18 +62,22 @@ public class Assignment {
         percent = json.getInt(PERCENT);
 
         String date1 = json.getString(DATE_ASSIGNED);
-        dateAssigned = new Date(Long.parseLong(date1.substring(date1.indexOf("(") + 1, date1.indexOf(")"))));
+        dateAssigned = parseDate(date1);
         String date2 = json.getString(DATE_DUE);
-        dateDue = new Date(Long.parseLong(date2.substring(date2.indexOf("(") + 1, date2.indexOf(")"))));
+        dateDue = parseDate(date2);
         String date3 = json.getString(DATE_COMPLETED);
-        try {
-            dateCompleted = new Date(Long.parseLong(date3.substring(date3.indexOf("(") + 1, date3.indexOf(")"))));
-        } catch (StringIndexOutOfBoundsException e) {
-            // Sometimes date is "null"
-            // TODO: properly handle this
-            Log.e("JSON", date3);
-        }
+        dateCompleted = parseDate(date3);
+    }
 
+    // dates from server are in the form of "\/Date(1422560175663)\/"
+    private Date parseDate(String date) {
+        int start = date.indexOf("(") + 1;
+        int end = date.indexOf(")");
+        if (end != -1 && start != 0) {
+            return new Date(Long.parseLong(date.substring(start, end)));
+        } else {
+            return null;
+        }
     }
 
     public int getGradebookNumber() {
@@ -183,32 +185,39 @@ public class Assignment {
     }
 
     public Date getDateAssigned() {
-        return dateAssigned;
+        return (getDateAssignedEpoch() > 0) ? dateAssigned : null;
     }
 
     public void setDateAssigned(Date dateAssigned) {
         this.dateAssigned = dateAssigned;
     }
 
+    public long getDateAssignedEpoch() {
+        return (dateAssigned != null) ? dateAssigned.getTime() : 0;
+    }
+
     public Date getDateDue() {
-        return dateDue;
+        return (getDateDueEpoch() > 0) ? dateDue : null;
     }
 
     public void setDateDue(Date dateDue) {
         this.dateDue = dateDue;
     }
 
+    public long getDateDueEpoch() {
+        return (dateDue != null) ? dateDue.getTime() : 0;
+    }
+
     public Date getDateCompleted() {
-        return dateCompleted;
+        return (getDateCompletedEpoch() > 0) ? dateCompleted : null;
     }
 
     public void setDateCompleted(Date dateCompleted) {
         this.dateCompleted = dateCompleted;
     }
 
-    public String printSimple() {
-        return getAssignmentNumber() + ". " + getDescription() + " - " +
-                getType() + " - " + getNumberCorrect() + "/" + getNumberPossible() +
-                " (" + getPercent() + "%)";
+    public long getDateCompletedEpoch() {
+        return (dateCompleted != null) ? dateCompleted.getTime() : 0;
     }
+
 }

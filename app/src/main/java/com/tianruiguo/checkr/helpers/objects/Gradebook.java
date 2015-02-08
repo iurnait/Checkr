@@ -48,15 +48,25 @@ public class Gradebook {
         className = jsonObject.getString(CLASS_NAME);
         missingAssignments = jsonObject.getInt(MISSING_ASSIGNMENTS);
 
-        // we get "updated" in the form of "\/Date(1422560175663)\/"
         String date = jsonObject.getString(UPDATED);
-        updated = new Date(Long.parseLong(date.substring(date.indexOf("(") + 1, date.indexOf(")"))));
+        updated = parseDate(date);
 
         trendDirection = jsonObject.getString(TREND_DIRECTION);
         percentGrade = jsonObject.getInt(PERCENT_GRADE);
         comment = jsonObject.getString(COMMENT);
         isUsingCheckMarks = jsonObject.getBoolean(IS_USING_CHECK_MARKS);
 
+    }
+
+    // dates from server are in the form of "\/Date(1422560175663)\/"
+    private Date parseDate(String date) {
+        int start = date.indexOf("(") + 1;
+        int end = date.indexOf(")");
+        if (end != -1 && start != 0) {
+            return new Date(Long.parseLong(date.substring(start, end)));
+        } else {
+            return null;
+        }
     }
 
     public boolean isUsingCheckMarks() {
@@ -68,11 +78,15 @@ public class Gradebook {
     }
 
     public Date getUpdated() {
-        return updated;
+        return (getUpdatedEpoch() > 0) ? updated : null;
     }
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public long getUpdatedEpoch() {
+        return (updated != null) ? updated.getTime() : 0;
     }
 
     public int getGradebookNumber() {
@@ -147,12 +161,9 @@ public class Gradebook {
         this.comment = comment;
     }
 
-    public String printSimple() {
-        return getPeriod() + ". " + getClassName() + " - " + getPercentGrade() + "%";
-    }
-    
     public String printSimpleDate() {
-        SimpleDateFormat fmt = new SimpleDateFormat ("E',' MMM dd 'at' hh:mm a");
-        return fmt.format(getUpdated());
+
+        SimpleDateFormat fmt = new SimpleDateFormat("E',' MMM dd 'at' hh:mm a");
+        return getUpdated() != null ? fmt.format(getUpdated()) : "Never";
     }
 }
