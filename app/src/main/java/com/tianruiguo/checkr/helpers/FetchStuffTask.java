@@ -69,9 +69,9 @@ public class FetchStuffTask extends AsyncTask<Void, Void, String> {
             URL url = new URL(API_URL);
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000);
-            // Heroku takes a to start up when dyno goes to sleep
-            urlConnection.setConnectTimeout(20000);
+            urlConnection.setConnectTimeout(10000);
+            // Heroku takes a while to start up when dyno goes to sleep
+            urlConnection.setReadTimeout(20000);
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
